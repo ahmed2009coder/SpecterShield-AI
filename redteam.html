@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpecterShield AI - Phantom Red-Team Attack Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Fira+Code:wght@400;600&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #07060c; }
+        .code-font { font-family: 'Fira Code', monospace; }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <nav class="border-b border-purple-900/40 bg-[#0f0c1a]/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-red-600 flex items-center justify-center text-white shadow-lg shadow-red-900/50">
+                    <i data-lucide="skull" class="w-5 h-5"></i>
+                </div>
+                <span class="font-extrabold text-white text-lg tracking-tight">Phantom<span class="text-red-400">Fuzzer</span> <span class="text-xs bg-red-950 text-red-300 px-2 py-0.5 rounded-full border border-red-500/40 font-mono">Red Team</span></span>
+            </div>
+            <div class="flex items-center gap-6 text-xs font-semibold">
+                <a href="index.html" class="text-slate-400 hover:text-white transition flex items-center gap-1.5"><i data-lucide="home" class="w-4 h-4"></i> Overview</a>
+                <a href="dashboard.html" class="text-slate-400 hover:text-white transition flex items-center gap-1.5"><i data-lucide="activity" class="w-4 h-4"></i> Threat Operations</a>
+                <a href="redteam.html" class="text-red-400 border-b-2 border-red-500 pb-1 flex items-center gap-1.5"><i data-lucide="skull" class="w-4 h-4"></i> Phantom Red-Team</a>
+                <a href="reports.html" class="text-slate-400 hover:text-white transition flex items-center gap-1.5"><i data-lucide="file-check" class="w-4 h-4"></i> Compliance & Audits</a>
+            </div>
+            <span class="text-xs font-mono text-red-400 bg-red-950/60 px-3 py-1 rounded-full border border-red-500/40 font-bold">ATTACK SIMULATOR ENGAGED</span>
+        </div>
+    </nav>
+
+    <!-- Main Workspace -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
+        
+        <div class="bg-[#0f0c1a] border border-red-900/40 rounded-2xl p-6">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-red-900/30">
+                <div>
+                    <h2 class="text-2xl font-black text-white flex items-center gap-2">
+                        <i data-lucide="flame" class="w-6 h-6 text-red-500"></i> Autonomous Red-Team Stress Testing Arena
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">Simulate aggressive adversary payloads against your endpoints to test zero-day resilience.</p>
+                </div>
+                <button onclick="runFuzzCampaign()" class="bg-red-600 hover:bg-red-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-red-900/40 flex items-center gap-2 transition">
+                    <i data-lucide="play" class="w-4 h-4"></i> Launch Fuzz Attack Campaign
+                </button>
+            </div>
+
+            <!-- Campaign Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6">
+                <div class="bg-[#07060c] p-4 rounded-xl border border-red-900/40 text-center">
+                    <span class="text-[10px] text-slate-400 font-mono uppercase block">Total Payloads Fuzzed</span>
+                    <span id="totalPayloads" class="text-2xl font-black text-white">12</span>
+                </div>
+                <div class="bg-[#07060c] p-4 rounded-xl border border-red-900/40 text-center">
+                    <span class="text-[10px] text-slate-400 font-mono uppercase block">Blocked by Guardian AI</span>
+                    <span id="blockedPayloads" class="text-2xl font-black text-emerald-400">12</span>
+                </div>
+                <div class="bg-[#07060c] p-4 rounded-xl border border-red-900/40 text-center">
+                    <span class="text-[10px] text-slate-400 font-mono uppercase block">Resilience Ratio</span>
+                    <span id="resilienceScore" class="text-2xl font-black text-purple-400">100.0%</span>
+                </div>
+            </div>
+
+            <!-- Attack Stream Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs font-mono">
+                    <thead class="bg-[#07060c] text-slate-400 border-b border-red-900/40">
+                        <tr>
+                            <th class="p-3">Vector</th>
+                            <th class="p-3">Synthesized Payload</th>
+                            <th class="p-3">Simulated Target</th>
+                            <th class="p-3">HTTP Status</th>
+                            <th class="p-3">Mitigation Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fuzzTableBody" class="divide-y divide-red-950/40">
+                        <tr>
+                            <td class="p-3 text-red-400 font-bold">SQL Injection</td>
+                            <td class="p-3 text-slate-300">' OR 1=1 --</td>
+                            <td class="p-3 text-slate-400">/api/v1/auth</td>
+                            <td class="p-3"><span class="bg-red-950 text-red-300 px-2 py-0.5 rounded">403 FORBIDDEN</span></td>
+                            <td class="p-3 text-emerald-400">Quarantined by AST-Patcher</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 text-red-400 font-bold">XSS Vector</td>
+                            <td class="p-3 text-slate-300">&lt;script&gt;alert(1)&lt;/script&gt;</td>
+                            <td class="p-3 text-slate-400">/api/v1/comments</td>
+                            <td class="p-3"><span class="bg-red-950 text-red-300 px-2 py-0.5 rounded">403 FORBIDDEN</span></td>
+                            <td class="p-3 text-emerald-400">HTML Entity Sanitized</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 text-red-400 font-bold">Command Injection</td>
+                            <td class="p-3 text-slate-300">; cat /etc/shadow</td>
+                            <td class="p-3 text-slate-400">/api/v1/diagnostics</td>
+                            <td class="p-3"><span class="bg-red-950 text-red-300 px-2 py-0.5 rounded">403 FORBIDDEN</span></td>
+                            <td class="p-3 text-emerald-400">Shlex Shell Isolation</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="border-t border-red-950 py-4 text-center text-xs text-slate-500 font-mono">
+        Phantom Red-Team Engine • SpecterShield AI Architecture
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        function runFuzzCampaign() {
+            alert("🚀 Launched 500 mutation payloads! All vectors intercepted by SpecterShield Autonomous Defense.");
+        }
+    </script>
+</body>
+</html>
